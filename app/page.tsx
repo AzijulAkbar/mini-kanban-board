@@ -92,7 +92,7 @@ export default function Home() {
   const filteredTasks = tasks.filter(task => {
     const matchPriority = filterPriority === "all" || task.priority === filterPriority;
     const matchSearch = task.title.toLowerCase().includes(filterSearch.toLowerCase()) ||
-                       (task.description?.toLowerCase().includes(filterSearch.toLowerCase()) || false);
+    (task.description?.toLowerCase().includes(filterSearch.toLowerCase()) || false);
     return matchPriority && matchSearch;
   });
 
@@ -117,9 +117,9 @@ export default function Home() {
             <label className="filter-label">Priority:</label>
             <select className="filter-select" value={filterPriority} onChange={e => setFilterPriority(e.target.value as TaskPriority | "all")}>
               <option value="all">Semua</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
               <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
             </select>
           </div>
           {(filterPriority !== "all" || filterSearch) && (
@@ -175,9 +175,9 @@ export default function Home() {
                 <div className="form-group">
                   <label className="form-label">Prioritas</label>
                   <select className="form-select" value={formData.priority} onChange={e => setFormData(p => ({ ...p, priority: e.target.value as TaskPriority }))}>
-                    <option value="high">High</option>
-                    <option value="medium">Medium</option>
                     <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
                   </select>
                 </div>
                 <div className="form-group">
