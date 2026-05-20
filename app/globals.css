@@ -38,6 +38,35 @@ body {
   margin-bottom: 32px;
 }
 
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  font-family: var(--font);
+  color: var(--text);
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.lang-btn:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.15);
+}
+
 .topbar-title {
   font-size: 1.375rem;
   font-weight: 700;

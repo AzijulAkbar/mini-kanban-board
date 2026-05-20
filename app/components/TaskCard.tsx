@@ -9,6 +9,7 @@ interface Props {
   onUpdate: (id: number, data: Partial<Task>) => void;
   onDelete: (id: number) => void;
   onDragStart: (task: Task) => void;
+  lang: "en" | "id";
 }
 
 const STATUS_OPTIONS: { value: TaskStatus; label: string }[] = [
@@ -29,12 +30,35 @@ const PRIORITY_CONFIG: Record<TaskPriority, { label: string; color: string }> = 
   low: { label: "Low", color: "#22c55e" },
 };
 
-export default function TaskCard({ task, onUpdate, onDelete, onDragStart }: Props) {
+const T = {
+  en: {
+    deleteTitle: "Delete Task?",
+    deleteText: "This task will be permanently deleted!",
+    confirmDelete: "Yes, Delete!",
+    cancel: "Cancel",
+    deleted: "Deleted!",
+    deleteSuccess: "Task successfully deleted.",
+    save: "Save",
+  },
+  id: {
+    deleteTitle: "Hapus Tugas?",
+    deleteText: "Tugas ini akan dihapus permanen!",
+    confirmDelete: "Ya, Hapus!",
+    cancel: "Batal",
+    deleted: "Terhapus!",
+    deleteSuccess: "Tugas berhasil dihapus.",
+    save: "Simpan",
+  }
+};
+
+export default function TaskCard({ task, onUpdate, onDelete, onDragStart, lang }: Props) {
   const [editing, setEditing] = useState(false);
   const [editTitle, setEditTitle] = useState(task.title);
   const [editDesc, setEditDesc] = useState(task.description || "");
   const [editDueDate, setEditDueDate] = useState(task.due_date || "");
   const [editPriority, setEditPriority] = useState(task.priority);
+
+  const t = T[lang];
 
   const save = () => {
     if (!editTitle.trim()) return;
@@ -57,20 +81,20 @@ export default function TaskCard({ task, onUpdate, onDelete, onDragStart }: Prop
 
   const handleDelete = () => {
     Swal.fire({
-      title: "Hapus Task?",
-      text: "Task ini akan dihapus permanen!",
+      title: t.deleteTitle,
+      text: t.deleteText,
       icon: "warning",
       showCancelButton: true,
       confirmButtonColor: "#ef4444",
       cancelButtonColor: "#8888a8",
-      confirmButtonText: "Ya, Hapus!",
-      cancelButtonText: "Batal",
+      confirmButtonText: t.confirmDelete,
+      cancelButtonText: t.cancel,
     }).then((result) => {
       if (result.isConfirmed) {
         onDelete(task.id);
         Swal.fire({
-          title: "Terhapus!",
-          text: "Task berhasil dihapus.",
+          title: t.deleted,
+          text: t.deleteSuccess,
           icon: "success",
           timer: 1500,
           showConfirmButton: false,
@@ -81,7 +105,7 @@ export default function TaskCard({ task, onUpdate, onDelete, onDragStart }: Prop
 
   const formatDate = (date?: string) => {
     if (!date) return null;
-    return new Date(date).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" });
+    return new Date(date).toLocaleDateString(lang === "en" ? "en-US" : "id-ID", { day: "numeric", month: "short", year: "numeric" });
   };
 
   const isOverdue = task.due_date && new Date(task.due_date) < new Date() && task.status !== "done";
@@ -94,14 +118,14 @@ export default function TaskCard({ task, onUpdate, onDelete, onDragStart }: Prop
           value={editTitle}
           onChange={e => setEditTitle(e.target.value)}
           onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) save(); if (e.key === "Escape") cancel(); }}
-          placeholder="Judul task..."
+          placeholder="Task title..."
           autoFocus
         />
         <textarea
           className="edit-textarea"
           value={editDesc}
           onChange={e => setEditDesc(e.target.value)}
-          placeholder="Deskripsi (opsional)..."
+          placeholder="Description (optional)..."
           rows={2}
         />
         <div className="edit-row">
@@ -128,8 +152,8 @@ export default function TaskCard({ task, onUpdate, onDelete, onDragStart }: Prop
           </div>
         </div>
         <div className="edit-actions">
-          <button className="btn-save" onClick={save}>Simpan</button>
-          <button className="btn-cancel" onClick={cancel}>Batal</button>
+          <button className="btn-save" onClick={save}>{t.save}</button>
+          <button className="btn-cancel" onClick={cancel}>{t.cancel}</button>
         </div>
       </div>
     </div>
@@ -150,7 +174,7 @@ export default function TaskCard({ task, onUpdate, onDelete, onDragStart }: Prop
                 <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
               </svg>
             </button>
-            <button className="icon-btn danger" onClick={handleDelete} title="Hapus">
+            <button className="icon-btn danger" onClick={handleDelete} title="Delete">
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="3 6 5 6 21 6"/>
                 <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
