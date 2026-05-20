@@ -1,12 +1,5 @@
-import mysql from "mysql2/promise";
+import { neon } from "@neondatabase/serverless";
 
-const pool = mysql.createPool({
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "",
-  database: process.env.DB_NAME || "mini-kanban-board",
-  waitForConnections: true,
-  connectionLimit: 10,
-});
+const sql = neon(process.env.DATABASE_URL!);
 
-export default pool;
+export default sql;
